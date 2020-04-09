@@ -16,7 +16,7 @@ syntax varlist(min=2 ts fv) [if] [, Treat(varlist max=1) ///
 		Contourplot ///
 		TContourplot ///
 		Clim(numlist min=2 max=2) ///
-		r2yz(numlist min=1 >0 <=1) ///
+		r2yz(numlist min=1 max=4 >0 <=1) ///
 		Clines(real 7) ///
 		Noreduce ///
 		Suppress ///
@@ -83,9 +83,12 @@ else {
 }
 
 if ("`r2yz'"==""){
-	local r2yz = 1
+	local mbounds = 1
 } 
-	
+else {
+	local mbounds = "`r2yz'"
+}
+
 if ("`clim'"==""){
 	local lim_ub = .4
 	local lim_lb = 0
@@ -317,14 +320,15 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 			
 			local mkd: subinstr local kd " " ", ", all	
 			local mky: subinstr local ky " " ", ", all
-			local mbounds: subinstr local r2yz " " ", ", all
+			
+			local mr2yz: subinstr local mbounds " " ", ", all
 		
 			if (`bench_count'>1){
 				mat oldbench = benchmarks
 				mat oldextreme = extreme
 			}
 			
-			mata: iterate_bounds((`mkd'), (`mky'),`r2dxj_x',`r2yxj_x',`dof',`se_treat',`b_treat',`reduce',`alpha',`adjust',"`bench_name'",`custom_ky',(`mbounds'))
+			mata: iterate_bounds((`mkd'), (`mky'),`r2dxj_x',`r2yxj_x',`dof',`se_treat',`b_treat',`reduce',`alpha',`adjust',"`bench_name'",`custom_ky',(`mr2yz'))
 
 			local bench2 = subinstr("`bench_name'",".","_",.)
 
@@ -386,16 +390,59 @@ if("`benchmark'"!="" | "`gbenchmark'"!="" ){
 if ("`extremeplot'" != ""){
 	preserve
 
+	if ("`r2yz'"!=""){
+		local mlines: subinstr local mbounds " " ", ", all
+	}
+	else {
+		local mlines = "1,.75,.5"
+	}
+	
+		
 	// Set bounds and initialize plot
 	if ("`elim'"=="" & "`benchmark'"!=""){
 		if (((`r2dxj_x'/(1 - `r2dxj_x'))  + .1) < `elim_ub'){
 			local elim_ub = `r2dxj_x'/(1 - `r2dxj_x')  + .1
 		}
-		mata: extreme_plot(`b_treat',`se_treat',`dof',`elim_lb',`elim_ub',`reduce',`adjust',0)
+		mata: extreme_plot(`b_treat',`se_treat',`dof',`elim_lb',`elim_ub',`reduce',`adjust',0,(`mlines'))
 	} 
 	else {
-		mata: extreme_plot(`b_treat',`se_treat',`dof',`elim_lb',`elim_ub',`reduce',`adjust',1)
+		mata: extreme_plot(`b_treat',`se_treat',`dof',`elim_lb',`elim_ub',`reduce',`adjust',1,(`mlines'))
 	}
+
+	local dim = colsof(s_extremeplot)	
+	svmat s_extremeplot, names("sense_ep_") 
+
+
+		if ("`r2yz'" == ""){
+			local legend = `"1 "100%" 2 "75%" 3 "50%""'
+		}
+		else {
+
+			if (`dim' == 2){
+				local lab1 = s_extremelabels[1,1]
+				local legend = `"1 "`lab1'%""'
+			}
+			if (`dim' == 3){
+				local lab1 = s_extremelabels[1,1]
+				local lab2 = s_extremelabels[1,2]
+				local legend = `"1 "`lab1'%"  2 "`lab2'%""'
+			}
+			if (`dim' == 4){
+				local lab1 = s_extremelabels[1,1]
+				local lab2 = s_extremelabels[1,2]
+				local lab3 = s_extremelabels[1,3]
+				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%""'
+			}
+			if (`dim' == 5){
+				local lab1 = s_extremelabels[1,1]
+				local lab2 = s_extremelabels[1,2]
+				local lab3 = s_extremelabels[1,3]
+				local lab4 = s_extremelabels[1,4]
+				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%" 4 "`lab4'%""'
+			}			
+		}
+		
+	
 	
 	if("`benchmark'"!="" |  "`gbenchmark'"!=""){
 		// Extract rug
@@ -403,20 +450,42 @@ if ("`extremeplot'" != ""){
 		svmat tempvals, names(benchval)
 		
 		// Plot
-		line sense_ep_2 sense_ep_1, name(s_extremeplot ,replace)  ///
+		line sense_ep_2 sense_ep_1, nodraw name(s_extremeplot ,replace)  ///
 		yline(`adjust',lpattern(dash) lcolor(red)) ///
-		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) legend(off) ///
-		 || line sense_ep_3 sense_ep_1, lpattern(dash) || line sense_ep_4 sense_ep_1, lpattern(dash_dot) || hist benchval, frequency discrete width(.0005) bcolor(black) fcolor(black) yaxis(2) ///
-		 ylabel(0 " " 20 " " 40 " " 60 " " 80 " " 100 " ", labcolor() axis(2) tlcolor(black) tlwidth(thin) labsize(small) tl(0)) ytitle(" ",axis(2)) yscale(alt lstyle(none) lcolor() axis(2)) legend(on size(small) rows(1) subtitle("Partial R{superscript:2} of confounder(s) with the outcome",size(small)) order (1 "100%" 2 "75%" 3 "50%"))
-	} 
-	else {
+		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) lcolor(black) legend(off) ///
+		|| hist benchval, frequency discrete width(.0005) bcolor(black) fcolor(black) yaxis(2) ///
+		 ylabel(0 " " 20 " " 40 " " 60 " " 80 " " 100 " ", nolab labcolor() axis(2) tlcolor(black) tlwidth(thin) labsize(tiny) tl(0))  ytitle(" ",axis(2)) yscale(alt lstyle(none) lcolor() axis(2)) 
+		 
+		} 
+		else { 
 		// Plot
-		line sense_ep_2 sense_ep_1, name(s_extremeplot ,replace)  ///
+		line sense_ep_2 sense_ep_1, nodraw name(s_extremeplot ,replace)  ///
 		yline(`adjust',lpattern(dash) lcolor(red)) ///
-		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) legend(off) ///
-		 || line sense_ep_3 sense_ep_1, lpattern(dash) || line sense_ep_4 sense_ep_1, lpattern(dash_dot) legend(on size(small) rows(1) subtitle("Partial R{superscript:2} of confounder(s) with the outcome",size(small)) order (1 "100%" 2 "75%" 3 "50%"))
-	}
+		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) lcolor(black) legend(off) 
+		}
+		 
+		if (`dim' > 2){
+			 forvalues i = 3(1)`dim' {
+				if (`i' == 3){
+					addplot_m: line sense_ep_`i' sense_ep_1, lpattern(dash) lcolor(black)
+				}
+				if (`i' == 4){
+					addplot_m: line sense_ep_`i' sense_ep_1, lpattern(dash_dot) lcolor(black)
+				}
+				if (`i' == 5){
+					addplot_m: line sense_ep_`i' sense_ep_1, lpattern(dot) lcolor(black)
+				}
+			 }
+		 }
+		 
+		 addplot_m: line sense_ep_2 sense_ep_1, lcolor(black) legend(on size(small) lcolor(black) rows(1) subtitle("Partial R{superscript:2} of confounder(s) with the outcome",size(small)) order (`legend'))
+		 graph display s_extremeplot
+	
+
+		 
 	capture: drop sense_ep_* benchval	
+	capture: mat drop s_extremeplot
+	
 	restore
 }
 
@@ -684,13 +753,13 @@ real scalar adjusted_t(estimate, se, dof, r2yz_dx, r2dz_x,reduce,h0){
 void recursive_extreme_limits(estimate, se, dof, param, lim_ub, reduce, crit){
 
 	if (reduce==1){
-		if (adjusted_estimate(estimate,se,dof,param,lim_ub,reduce) > crit){
-			 lim_ub = lim_ub + .05
+		if (adjusted_estimate(estimate,se,dof,param,lim_ub,reduce) > crit & lim_ub <1){
+			 lim_ub = lim_ub + .1
 			 (void) recursive_extreme_limits(estimate, se, dof, param, lim_ub, reduce, crit)
 		} 
 	} else {
-		if (adjusted_estimate(estimate,se,dof,param,lim_ub,reduce) < crit){
-			 lim_ub = lim_ub + .05
+		if (adjusted_estimate(estimate,se,dof,param,lim_ub,reduce) < crit & lim_ub < 1){
+			 lim_ub = lim_ub + .1
 			 (void) recursive_extreme_limits(estimate, se, dof, param, lim_ub, reduce, crit)
 		} 	
 	}
@@ -818,44 +887,35 @@ void extreme_bounds(custom_ky){
 }
 
 
-void extreme_plot(estimate, se, dof, lim_lb,lim_ub,reduce,crit,userlim){
+void extreme_plot(estimate, se, dof, lim_lb,lim_ub,reduce,crit, userlim, real vector r2yz){
 	real matrix params, output, Y
-	real scalar k, i
+	real scalar k, i, j, n_outputs
 	real colvector limits
 
-	params = J(1,3,.)
-	params[1,1] = 1
-	params[1,2] = .75
-	params[1,3] = .5
-
+	n_outputs = length(r2yz) + 1
+	
+	
 	if (userlim==0){
 		(void) recursive_extreme_limits(estimate, se, dof, .45, lim_ub, reduce, crit)
 	}
 	limits = length(range(lim_lb, lim_ub, .001))
 	
 	(void) st_addobs(limits)
-	output = J(limits,4,.)
+	output = J(limits,n_outputs,.)
 	k = 1
 
 	for (i=lim_lb; i<=lim_ub; i=i+.001){ 
 	   output[k,1] = i 
-	   output[k,2] = adjusted_estimate(estimate,se,dof,params[1,1],i,reduce)
-	   output[k,3] = adjusted_estimate(estimate,se,dof,params[1,2],i,reduce)
-	   output[k,4] = adjusted_estimate(estimate,se,dof,params[1,3],i,reduce)
+	   for (j=2; j<=n_outputs; j=j+1){
+		  output[k,j] = adjusted_estimate(estimate,se,dof,r2yz[1,j-1],i,reduce)
+	   }
 	   k = k + 1
 	}	
+	
+	r2yz = r2yz*100
 
-	(void) st_addvar("double","sense_ep_1")
-	(void) st_addvar("double","sense_ep_2")
-	(void) st_addvar("double","sense_ep_3")
-	(void) st_addvar("double","sense_ep_4")
-
-	for (i=1; i<=limits; i++){
-		st_store(i,"sense_ep_1",output[i,1])
-		st_store(i,"sense_ep_2",output[i,2])
-		st_store(i,"sense_ep_3",output[i,3])
-		st_store(i,"sense_ep_4",output[i,4])
-	}
+	(void) st_matrix("s_extremeplot",output)
+	(void) st_matrix("s_extremelabels",r2yz)
 }
 
 
