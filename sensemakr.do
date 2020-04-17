@@ -172,7 +172,7 @@ else {
 // First Output Table
 
 if (`adjust' == 0){
-mata:  printf("\n{space 60}{txt} DOF    =   %5.0f \n{space 60} q      =    %3.2f \n{space 60} alpha  =    %3.2f \n{space 60} reduce =   %5s\n{space 60} tau    =       0\n",`dof',`q',`alpha',"`reduce_t'")
+mata:  printf("\n{space 60}{txt} DOF    =   %5.0f \n{space 60} q      =    %3.2f \n{space 60} alpha  =    %3.2f \n{space 60} reduce =   %5s\n{space 60} H0     =       0\n",`dof',`q',`alpha',"`reduce_t'")
 
 } 
 else {
@@ -183,12 +183,12 @@ else {
 	local spacer = 1
 }
 
-mata:  printf("\n{space 60}{txt} DOF    =   %5.0f \n{space 60} q      =    %3.2f \n{space 60} alpha  =    %3.2f \n{space 60} reduce =   %5s\n{space 60} tau    =  {space `spacer'}%4.3f\n",`dof',`q',`alpha',"`reduce_t'",`adjust')
+mata:  printf("\n{space 60}{txt} DOF    =   %5.0f \n{space 60} q      =    %3.2f \n{space 60} alpha  =    %3.2f \n{space 60} reduce =   %5s\n{space 60} H0    =  {space `spacer'}%4.3f\n",`dof',`q',`alpha',"`reduce_t'",`adjust')
 
 }
-mata:  printf("\n{txt} Treatment{space 5} {c |} {space 4}Coef.{space 5} S.E.{space 3}t(H0,tau){space 3} R2yd.x{space 5}RV_q{space 4}RV_qa\n")
+mata:  printf("\n{txt} Treatment{space 5} {c |} {space 4}Coef.{space 5} S.E.{space 6}t(H0){space 4}R2yd.x{space 5}RV_q{space 4}RV_qa\n")
 mata:  printf("{hline 16}{c +}{hline 60}\n")
-mata:  printf("{txt}%15s {c |}  {res}%8.4f  %8.4f    %8.4f  %8.4f %8.4f %8.4f\n\n",substr("`treat'",1,15),`b_treat',`se_treat',`t_adjust',`r2yd_x',`rv_q',`rv_qa')
+mata:  printf("{txt}%15s {c |}  {res}%8.4f  %8.4f   %8.4f  %8.4f %8.4f %8.4f\n\n",substr("`treat'",1,15),`b_treat',`se_treat',`t_adjust',`r2yd_x',`rv_q',`rv_qa')
 
 
 // Verbose
@@ -261,10 +261,10 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 	mata:  printf("{txt} Bounds on Omitted Variable Bias: \n\n")
 	
 	if (`custom_ky' == 1){
-		mata:  printf("{txt} Bound {space `spacer_c'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.{space 6}S.E.{space 2}t(H0,tau){space 2}Lower CI{space 1}Upper CI \n{hline `spacer_d'}{c +}{hline 70}\n")
+		mata:  printf("{txt} Bound {space `spacer_c'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.{space 6}S.E.{space 5}t(H0){space 2}Lower CI{space 1}Upper CI \n{hline `spacer_d'}{c +}{hline 70}\n")
 	} 
 	else {
-		mata:  printf("{txt} Bound {space `spacer_a'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.{space 6}S.E.{space 2}t(H0,tau){space 2}Lower CI{space 1}Upper CI \n{hline `spacer_b'}{c +}{hline 70}\n")
+		mata:  printf("{txt} Bound {space `spacer_a'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.{space 6}S.E.{space 5}t(H0){space 2}Lower CI{space 1}Upper CI \n{hline `spacer_b'}{c +}{hline 70}\n")
 	}
 	global lim_ub = `lim_ub'
 
@@ -419,30 +419,30 @@ if ("`extremeplot'" != ""){
 		else {
 
 			if (`dim' == 2){
-				local lab1 = s_extremelabels[1,1]
+
+				local lab1 : di %4.1f s_extremelabels[1,1]
 				local legend = `"1 "`lab1'%""'
 			}
 			if (`dim' == 3){
-				local lab1 = s_extremelabels[1,1]
-				local lab2 = s_extremelabels[1,2]
+				local lab1 : di %4.1f s_extremelabels[1,1]
+				local lab2 : di %4.1f s_extremelabels[1,2]
 				local legend = `"1 "`lab1'%"  2 "`lab2'%""'
 			}
 			if (`dim' == 4){
-				local lab1 = s_extremelabels[1,1]
-				local lab2 = s_extremelabels[1,2]
-				local lab3 = s_extremelabels[1,3]
+				local lab1 : di %4.1f s_extremelabels[1,1]
+				local lab2 : di %4.1f s_extremelabels[1,2]		
+				local lab3 : di %4.1f s_extremelabels[1,3]
 				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%""'
 			}
 			if (`dim' == 5){
-				local lab1 = s_extremelabels[1,1]
-				local lab2 = s_extremelabels[1,2]
-				local lab3 = s_extremelabels[1,3]
-				local lab4 = s_extremelabels[1,4]
+				local lab1 : di %4.1f s_extremelabels[1,1]
+				local lab2 : di %4.1f s_extremelabels[1,2]		
+				local lab3 : di %4.1f s_extremelabels[1,3]
+				local lab4 : di %4.1f s_extremelabels[1,4]
 				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%" 4 "`lab4'%""'
 			}			
 		}
 		
-	
 	
 	if("`benchmark'"!="" |  "`gbenchmark'"!=""){
 		// Extract rug
@@ -530,27 +530,28 @@ if ("`latex'" != ""){
 
 		local round_treat = round(`e(treat_coef)',.001)
 		local round_se = round(`e(treat_se)',.001)
-		local round_t = round(`e(treat_coef)'/`e(treat_se)',.001)
+		local round_t = round(`t_adjust',.001)
 		local round_r2yd_x = round(100*`e(r2yd_x)',.01)
 		local round_rv_q = round(100*`e(rv_q)',.01)
 		local round_rv_qa = round(100*`e(rv_qa)',.01)
-		local dim = rowsof(e(bounds))					
+		local dim = rowsof(e(bounds))	
+		local round_adjust = round(`adjust',.01)
 		
 		file write sense_texfile  "\begin{table} \centering " _n
 		file write sense_texfile  "\begin{tabular}{lrrrrrr} " _n
 		file write sense_texfile  "\multicolumn{7}{c}{Outcome: \textit{`e(outcome)'}} \\ \hline \hline " _n
-		file write sense_texfile  "Treatment: & Est. & S.E. & t-value & ^2_{Y \sim D |{\bf X}}$ & {q = `e(q)'}$ & {q = `e(q)', \alpha = `e(alpha)'} \\ \hline" _n
+		file write sense_texfile  "Treatment: & Est. & S.E. & t(H0=`round_adjust') & \$R^2_{Y \sim D |{\bf X}}\$ & \$RV_{q = `e(q)'}\$ & \$RV_{q = `e(q)', \alpha = `e(alpha)'}\$ \\ \hline" _n
 		file write sense_texfile  "\textit{`e(treatment)'} & `round_treat' &  `round_se' & `round_t' & `round_r2yd_x'\% & `round_rv_q' \% & `round_rv_qa'\% \\ " _n
-		file write sense_texfile  "\hline df = `e(dof)' & & \multicolumn{5}{r}" _n
+		file write sense_texfile  "\hline df = `e(dof)' " _n
 		
 		forvalues  i = 1(1)`dim' {
 			mat benchmarks = e(bounds)
-			local temp = round(100*benchmarks[`i',3],.001)
-			local temp2 = round(100*benchmarks[`i',4],.001)
+			local temp = round(100*benchmarks[`i',3],.01)
+			local temp2 = round(100*benchmarks[`i',4],.01)
 			local kdlabel = benchmarks[`i',1]
 			local kylabel = benchmarks[`i',2]
-			
-			file write sense_texfile  "{ \small \textit{Bound (`kdlabel'/`kylabel'x female)}: ^2_{Y\sim Z| {\bf X}, D}$ = `temp2'\%, ^2_{D\sim Z| {\bf X} }$ = `temp'\%} \\" _n
+
+			file write sense_texfile  "& \multicolumn{6}{r}{ \small \textit{Bound (`kdlabel'/`kylabel'x female)}: \$R^2_{Y\sim Z| {\bf X}, D}\$ = `temp2'\%, \$R^2_{D\sim Z| {\bf X} }\$ = `temp'\%} \\" _n
 		
 		}
 		mat drop benchmarks
@@ -817,9 +818,9 @@ void iterate_bounds(real vector kd,real vector ky,r2dxj_x,r2yxj_x,dof,se_treat,b
 		benchmarks[i,9] = upper_CI
 		
 		if (custom_ky!=1){
-			printf("{txt}%5.2fx %15s {c |}{res} %8.4f  %8.4f  %8.4f  %8.4f   %8.4f  %8.4f %8.4f \n",kd[i],substr(bench,1,15),r2dz_x,r2yz_dx,adjusted_e,adjusted_se,adjusted_t,lower_CI,upper_CI)
+			printf("{txt}%5.2fx %15s {c |}{res} %8.4f  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f %8.4f \n",kd[i],substr(bench,1,15),r2dz_x,r2yz_dx,adjusted_e,adjusted_se,adjusted_t,lower_CI,upper_CI)
 		} else {
-			printf("{txt}%3.2f/%3.2fx %15s {c |}{res} %8.4f  %8.4f  %8.4f  %8.4f   %8.4f  %8.4f %8.4f \n",kd[i],ky[i],substr(bench,1,15),r2dz_x,r2yz_dx,adjusted_e,adjusted_se,adjusted_e/adjusted_se,lower_CI,upper_CI)
+			printf("{txt}%3.2f/%3.2fx %15s {c |}{res} %8.4f  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f %8.4f \n",kd[i],ky[i],substr(bench,1,15),r2dz_x,r2yz_dx,adjusted_e,adjusted_se,adjusted_e/adjusted_se,lower_CI,upper_CI)
 		}
 		lim_ub = strtoreal(st_global("lim_ub"))
 		user_clim = strtoreal(st_global("user_clim"))
