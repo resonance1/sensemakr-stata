@@ -1,4 +1,4 @@
-# sensemakr: Sensitivity Analysis Tools for OLS  <img src="misc/sensemakr-logo-small.png" align="right" />
+# sensemakr: Sensitivity Analysis Tools for OLS (Stata)  <img src="misc/sensemakr-logo-small.png" align="right" />
 
 `sensemakr` for Stata implements a suite of sensitivity analysis tools that
 extends the traditional omitted variable bias framework and makes it
