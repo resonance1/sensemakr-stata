@@ -8,6 +8,16 @@ Sense of Sensitivity: Extending Omitted Variable Bias.” Journal of the
 Royal Statistical Society, Series B (Statistical
 Methodology).](https://doi.org/10.1111/rssb.12348)
 
+
+# Related Packages
+
+  - Download the R package here:
+    <https://github.com/carloscinelli/sensemakr/>
+
+  - Check out the Robustness Value Shiny App at:
+    <https://carloscinelli.shinyapps.io/robustness_value/>
+
+    
 # Installation
 
 To install the current github version, run:
