@@ -1,4 +1,4 @@
 v 0.9
 
-d 'sensemakr': sensitivity analysis for OLS
-p sensemakr
+d sensemakr sensemakr 
+p sensemakr sensemakr
