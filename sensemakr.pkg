@@ -1,0 +1,8 @@
+v 0.9
+d 'sensemakr': sensitivity analysis for OLS
+d 
+d Distribution-Date:   20200417
+d License: MIT
+d 
+f sensemakr.ado
+f sensemakr.sthlp

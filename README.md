@@ -1,4 +1,4 @@
-# sensemakr: Sensitivity Analysis Tools for OLS  <img src="misc/sensemakr-logo-small.png" align="right" />
+# sensemakr: Sensitivity Analysis Tools for OLS (Stata)  <img src="misc/sensemakr-logo-small.png" align="right" />
 
 `sensemakr` for Stata implements a suite of sensitivity analysis tools that
 extends the traditional omitted variable bias framework and makes it
@@ -8,10 +8,22 @@ Sense of Sensitivity: Extending Omitted Variable Bias.” Journal of the
 Royal Statistical Society, Series B (Statistical
 Methodology).](https://doi.org/10.1111/rssb.12348)
 
+
+# Related Packages
+
+  - Download the R package here:
+    <https://github.com/carloscinelli/sensemakr/>
+
+  - Check out the Robustness Value Shiny App at:
+    <https://carloscinelli.shinyapps.io/robustness_value/>
+
+    
 # Installation
 
 To install the current github version, run:
 
 ```
-net install sensemakr, from("https://github.com/resonance1/sensemakr-stata/")
+net install sensemakr, replace from("https://raw.githubusercontent.com/resonance1/sensemakr-stata/master/")
 ```
+
+# Basic Usage
