@@ -69,8 +69,7 @@ treatment({help varlist:treatvar}) {it:options}]
 
 {title:Examples}
 
-    Load example data
-{p 4 8 2}{stata "use darfur.dta, clear":. use darfur.dta, clear}{p_end}
+    {stata "use darfur.dta, clear":Load example data}
 
     {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female): Basic Syntax}
 
