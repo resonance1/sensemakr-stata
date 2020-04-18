@@ -23,7 +23,7 @@ Methodology).](https://doi.org/10.1111/rssb.12348)
 To install the current github version, run:
 
 ```
-net install sensemakr, replace from("https://raw.githubusercontent.com/resonance1/sensemakr-stata/master/")
+net install sensemakr, replace force from("https://raw.githubusercontent.com/resonance1/sensemakr-stata/master/")
 ```
 
 # Basic Usage
