@@ -79,7 +79,7 @@ treatment({help varlist:treatvar}) {it:options}]
 {p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot{p_end}
 
     Combining individual and grouped benchmarks
-{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female)": sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female)}{p_end}
+{p 4 8 2}{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female): sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female)}{p_end}
 
     Altering default bounds
 {p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) }{p_end}
