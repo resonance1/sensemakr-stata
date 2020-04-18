@@ -50,8 +50,9 @@ sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_
 i.village_factor, treat(directlyharmed) benchmark(female) tcontourplot
 ```
 
-<img src="misc/tcontour.png" align="left" width="100%" />
-<br />
+![](/misc/tcontour.png)
+
+
 
 ```
 // Generate an extreme scenario plot
@@ -59,5 +60,4 @@ sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_
 i.village_factor, treat(directlyharmed) benchmark(female) extremeplot 
 ```
 
-
-<img src="misc/extreme.png" align="left" width="100%"/>
+![](/misc/extreme.png)
