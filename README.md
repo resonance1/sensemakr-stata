@@ -27,3 +27,31 @@ net install sensemakr, replace from("https://raw.githubusercontent.com/resonance
 ```
 
 # Basic Usage
+
+```
+// Load dataset
+use darfur.dta, clear
+
+// Run sensitivity analysis, using female as a benchmark covariate:
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
+i.village_factor, treat(directlyharmed) benchmark(female)
+
+// Generate a contour plot
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
+i.village_factor, treat(directlyharmed) benchmark(female) contourplot
+
+```
+
+```
+// Generate a t-contour plot
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
+i.village_factor, treat(directlyharmed) benchmark(female) tcontourplot
+
+```
+
+```
+// Generate an extreme scenario plot
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
+i.village_factor, treat(directlyharmed) benchmark(female) extremeplot 
+
+```
