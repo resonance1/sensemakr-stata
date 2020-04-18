@@ -73,19 +73,19 @@ treatment({help varlist:treatvar}) {it:options}]
 {p 4 8 2}{stata "use darfur.dta, clear":. use darfur.dta, clear}{p_end}
 
     Basic syntax
-{p 4 8 2}{stata " sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)}{p_end}
+{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)}{p_end}
 
     Basic graphing
-{p 4 8 2}{stata " sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot}{p_end}
+{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot}{p_end}
 
     Combining individual and grouped benchmarks
 {p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female) ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) benchmark(female) }{p_end}
 
     Altering default bounds
-{p 4 8 2}{stata " sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) }{p_end}
+{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3) }{p_end}
 
     Altering assumptions
-{p 4 8 2}{stata " sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) q(2) noreduce ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)  q(2) noreduce }{p_end}
+{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) q(2) noreduce ":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)  q(2) noreduce }{p_end}
 
 
 {title:Saved results}
@@ -116,7 +116,7 @@ By default, {cmd:sensemakr}  ereturns the following results, which can be displa
 {p2col 5 15 19 2: Matrices}{p_end}
 {synopt:{cmd: e(bounds)}} bounds table in matrix form {p_end}
 {synopt:{cmd: e(extreme)}} extreme bounds table in matrix form {p_end}
-{synopt:{cmd: e(contourgrid)}}matrix of values used to construct contour plots {p_end}
+{synopt:{cmd: e(contourgrid)}} matrix of values used to construct contour plots {p_end}
 
 {title:References}
 
