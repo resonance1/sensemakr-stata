@@ -73,19 +73,19 @@ treatment({help varlist:treatvar}) {it:options}]
 {p 4 8 2}{stata "use darfur.dta, clear":. use darfur.dta, clear}{p_end}
 
     Basic syntax
-{p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female){p_end}
+{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female): test}
 
     Basic graphing
-{p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot{p_end}
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot
 
     Combining individual and grouped benchmarks
-{p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all) {p_end}
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all)
 
     Altering default bounds
-{p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3){p_end}
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3)
 
     Altering assumptions
-{p 4 8 2}sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) q(2) noreduce{p_end}
+sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) q(2) noreduce
 
 
 {title:Saved results}
