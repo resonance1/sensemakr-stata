@@ -73,7 +73,7 @@ treatment({help varlist:treatvar}) {it:options}]
 {p 4 8 2}{stata "use darfur.dta, clear":. use darfur.dta, clear}{p_end}
 
     Basic syntax
-{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)}{p_end}
+{p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female)":. x}{p_end}
 
     Basic graphing
 {p 4 8 2}{stata "sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot":. sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot}{p_end}
