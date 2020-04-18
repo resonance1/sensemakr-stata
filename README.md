@@ -40,9 +40,7 @@ i.village_factor, treat(directlyharmed) benchmark(female)
 sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
 i.village_factor, treat(directlyharmed) benchmark(female) contourplot
 ```
-![](/misc/contour.png)
-
-
+<img src="/misc/contour.png" width="50%">
 
 ```
 // Generate a t-contour plot
