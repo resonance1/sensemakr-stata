@@ -40,7 +40,7 @@ i.village_factor, treat(directlyharmed) benchmark(female)
 sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
 i.village_factor, treat(directlyharmed) benchmark(female) contourplot
 ```
-<p aling = "center">
+<p align = "center">
 <img src="/misc/contour.png" width="75%">
 </p>
 
@@ -50,7 +50,11 @@ sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_
 i.village_factor, treat(directlyharmed) benchmark(female) tcontourplot
 ```
 
-![](/misc/tcontour.png)
+<p align = "center">
+<img src="/misc/tcontour.png" width="75%">
+</p>
+
+
 
 
 
@@ -59,5 +63,7 @@ i.village_factor, treat(directlyharmed) benchmark(female) tcontourplot
 sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female ///
 i.village_factor, treat(directlyharmed) benchmark(female) extremeplot 
 ```
+<p align = "center">
+<img src="/misc/extreme.png" width="75%">
+</p>
 
-![](/misc/extreme.png)
