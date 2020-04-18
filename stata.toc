@@ -1,0 +1,4 @@
+v 1
+d sensemakr
+d by Jeremy Ferwerda (jeremy.a.ferwerda@dartmouth.edu)
+p sensemakr sensitivity tools for OLS
