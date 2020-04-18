@@ -75,9 +75,9 @@ treatment({help varlist:treatvar}) {it:options}]
 
     {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot:Basic Graphing}
 
-    {stata sensemakr peacefactor directlyharmed age far herder pastvoted hhsize female i.village_factor, treat(directlyharmed) benchmark(female) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all):Grouped benchmarks}
+    {stata sensemakr peacefactor directlyharmed age far herder pastvoted hhsize female i.village_factor, treat(directlyharmed) gbenchmark(age farmer herder pastvoted hhsize female) gname(all):Grouped benchmarks}
 
-    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3): Altering default bounds}
+    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3):Altering default bounds}
 
 {title:Saved results}
 
