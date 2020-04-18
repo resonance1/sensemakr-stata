@@ -72,21 +72,13 @@ treatment({help varlist:treatvar}) {it:options}]
     Load example data
 {p 4 8 2}{stata "use darfur.dta, clear":. use darfur.dta, clear}{p_end}
 
-    Basic syntax
-{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female): test}
+    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female): Basic Syntax}
 
-    Basic graphing
-sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot
+    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot: Basic Graphing}
 
-    Combining individual and grouped benchmarks
-sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all)
+    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) gbenchmark(age farmer_dar herder_dar pastvoted hhsize_darfur female) gname(all): Combining individual and grouped benchmarks}
 
-    Altering default bounds
-sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3)
-
-    Altering assumptions
-sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) q(2) noreduce
-
+    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3): Altering default bounds}
 
 {title:Saved results}
 
