@@ -39,10 +39,10 @@ treatment({help varlist:treatvar}) {it:options}]
 
 {syntab:Advanced}
 {synopt:{opt alpha(real)}}the significance level. Defaults to 0.05{p_end}
-{synopt:{opt kd(numlist)}}specify strength of confounder relative to treatment. Defaults to (1 2 3) {p_end}
-{synopt:{opt ky(numlist)}}specify strength of confounder relative to  outcome. Defaults to kd. ky and kd must be the same length{p_end}
+{synopt:{opt kd(numlist)}}specify strength of confounder relative to benchmark in explaining the treatment. Defaults to (1 2 3) {p_end}
+{synopt:{opt ky(numlist)}}specify strength of confounder  relative to benchmark in explaining the outcome. Defaults to kd. ky and kd must be the same length{p_end}
 {synopt:{opt noreduce}}assume that confounders increase the estimate, rather than reduce the estimate{p_end}
-{synopt:{opt q(real)}}specify what fraction of the effect estimate would have to be explained away to be problematic. {p_end}
+{synopt:{opt q(real)}}specify what fraction of the effect estimate would have to be explained away to be problematic. Defaults to 1. {p_end}
 {synopt:{opt r2yz(numlist)}}modify r2yz values for the extreme bounds table and extreme scenario plot. Maximum of 4 values. {p_end}
 
 {synoptline}
@@ -69,15 +69,39 @@ treatment({help varlist:treatvar}) {it:options}]
 
 {title:Examples}
 
-    {stata "use darfur.dta, clear":Load example data}
+{pstd}Load example data{p_end}
+{phang2}{cmd:. use darfur.dta, clear}{p_end}
+{phang2}{stata "use darfur.dta, clear":Run}{p_end}
 
-    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female):Basic Syntax}
+{pstd}Basic syntax{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) benchmark(female)}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female):Run}{p_end}
 
-    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot extremeplot:Basic Graphing}
+{pstd}Contour plots{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) benchmark(female) contourplot tcontourplot}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) contourplot tcontourplot:Run}{p_end}
 
-    {stata sensemakr peacefactor directlyharmed age far herder pastvoted hhsize female i.village_factor, treat(directlyharmed) gbenchmark(age farmer herder pastvoted hhsize female) gname(all):Grouped benchmarks}
+{pstd}Extreme scenario plot{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) benchmark(female) extremeplot}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) extremeplot:Run}{p_end}
 
-    {stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(pastvoted female) kd(4 5) ky(3 3):Altering default bounds}
+{pstd}Changing extreme scenarios{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) benchmark(female) r2yz(.5 .6 .7 .8) extremeplot}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age farmer_dar herder_dar pastvoted hhsize_darfur female i.village_factor, treat(directlyharmed) benchmark(female) r2yz(.5 .6 .7 .8) extremeplot:Run}{p_end}
+
+{pstd}Grouped benchmarks{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age far herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) gbenchmark(age farmer herder pastv hhsize female) gname(all)}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age far herder pastv hhsize female i.village_f, treat(directlyharmed) gbenchmark(age farmer herder pastvoted hhsize female) gname(all):Run}{p_end}
+
+{pstd}Altering default bounds{p_end}
+{phang2}{cmd:. sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, ///}{p_end}
+{phang2}{cmd:.   treat(directlyharmed) benchmark(pastv female) kd(4 5) ky(1 1)}{p_end}
+{phang2}{stata sensemakr peacefactor directlyharmed age farmer herder pastv hhsize female i.village_f, treat(directlyharmed) benchmark(pastv female) kd(4 5) ky(1 1):Run}{p_end}
 
 {title:Saved results}
 
@@ -88,26 +112,27 @@ By default, {cmd:sensemakr}  ereturns the following results, which can be displa
 {synoptset 15 tabbed}{...}
 {p2col 5 15 19 2: Scalars}{p_end}
 {synopt:{cmd:e(treat_coef)}}  the original treatment coefficient{p_end}
-{synopt:{cmd:e(r2yd_x)}}  r2yd.x{p_end}
+{synopt:{cmd:e(r2yd_x)}}  partial r2 of treatment with outcome{p_end}
 {synopt:{cmd:e(rv_q)}}  the robustness value given q{p_end}
 {synopt:{cmd:e(rv_qa)}}  the robustness value given q and alpha{p_end}
-{synopt:{cmd:e(rv_critical)}} the null hypothesis{p_end}
+{synopt:{cmd:e(rv_critical)}} the null hypothesis (H0){p_end}
 {synopt:{cmd:e(q)}} the value of q {p_end}
 {synopt:{cmd:e(dof)}} degrees of freedom{p_end}
 {synopt:{cmd:e(alpha)}} the significance level{p_end}
 
 {synoptset 15 tabbed}{...}
 {p2col 5 15 19 2: Macros}{p_end}
-{synopt:{cmd:e(bench)}}  a list of benchmark variables {p_end}
+{synopt:{cmd:e(bench)}}  a list of variables used as benchmarks{p_end}
 {synopt:{cmd:e(gbench)}}  a list of variables included in the group benchmark {p_end}
 {synopt:{cmd:e(treatment)}}  the treatment variable{p_end}
-{synopt:{cmd:e(outcome)}}  the dependent variables{p_end}
+{synopt:{cmd:e(outcome)}}  the dependent variable{p_end}
 
 {synoptset 15 tabbed}{...}
 {p2col 5 15 19 2: Matrices}{p_end}
 {synopt:{cmd: e(bounds)}} bounds table in matrix form {p_end}
 {synopt:{cmd: e(extreme)}} extreme bounds table in matrix form {p_end}
-{synopt:{cmd: e(contourgrid)}} matrix of values used to construct contour plots {p_end}
+{synopt:{cmd: e(contourgrid)}} matrix of values used to construct contour plot {p_end}
+{synopt:{cmd: e(tcontourgrid)}} matrix of values used to construct t-contour plot {p_end}
 
 {title:References}
 
