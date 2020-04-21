@@ -1,4 +1,3 @@
-
 program define sensemakr, eclass
 version 13
 syntax varlist(min=2 ts fv) [if] [, Treat(varlist max=1) ///
@@ -24,7 +23,6 @@ marksample touse
 local depvar: word 1 of `varlist'
 local regs: list varlist - depvar
 qui: reg `depvar' `regs' if `touse'
-
 
 
 // Options and Error handling
@@ -60,6 +58,7 @@ else {
 	local reduce_t = "TRUE"
 }
 
+// Kd-ky
 local count_values_kd: word count `kd'
 
 if ("`ky'" != ""){
@@ -76,6 +75,7 @@ else {
 	local custom_ky = 0
 }
 
+// Extreme scenarios
 if ("`r2yz'"==""){
 	local mbounds = 1
 } 
@@ -83,6 +83,7 @@ else {
 	local mbounds = "`r2yz'"
 }
 
+// Contour plot limits
 if ("`clim'"==""){
 	local lim_ub = .4
 	local lim_lb = 0
@@ -109,6 +110,7 @@ if (`lim_lb' > `lim_ub'){
 	exit 198
 }	
 
+// Extreme plot limits
 if ("`elim'"==""){
 	local elim_ub = .4
 	local elim_lb = 0
@@ -146,7 +148,8 @@ local f2yd_x = `t_treat'*`t_treat' / `dof'
 local scale = `q'*100
 					
 if (`qf' < 0){ 
-	local rv = 0
+	local rv_q = 0
+	local rv_qa = 0
 } 
 else {
 	local rv_q = .5 * (sqrt(`qf'^4 + (4 * `qf'^2)) - `qf'^2)
@@ -156,7 +159,6 @@ else {
 if ("`noreduce'" == ""){
 	local adjust = `b_treat' - (`b_treat'*`q')
 	local t_adjust = sign(`b_treat')*abs((`b_treat'-`adjust')/`se_treat')
-	
 }
 else {
 	local adjust = `b_treat' + (`b_treat'*`q')
@@ -166,49 +168,39 @@ else {
 // First Output Table
 
 if (`adjust' == 0){
-mata:  printf("\n{space 59}{txt} DOF    =   %5.0f \n{space 59} q      =    %3.2f \n{space 59} alpha  =    %3.2f \n{space 59} reduce =   %5s\n{space 59} H0     =       0\n",`dof',`q',`alpha',"`reduce_t'")
-
+	mata:  printf("\n{space 59}{txt} DOF    =   %5.0f \n{space 59} q      =    %3.2f \n{space 59} alpha  =    %3.2f \n{space 59} reduce =   %5s\n{space 59} H0     =       0\n",`dof',`q',`alpha',"`reduce_t'")
 } 
 else {
-if (`adjust' < 0){
-	local spacer = 0
-}
-else {
-	local spacer = 1
-}
-
-mata:  printf("\n{space 59}{txt} DOF    =   %5.0f \n{space 59} q      =    %3.2f \n{space 59} alpha  =    %3.2f \n{space 59} reduce =   %5s\n{space 59} H0     =  {space `spacer'}%4.3f\n",`dof',`q',`alpha',"`reduce_t'",`adjust')
-
+	if (`adjust' < 0){
+		local spacer = 0
+	}
+	else {
+		local spacer = 1
+	}
+	mata:  printf("\n{space 59}{txt} DOF    =   %5.0f \n{space 59} q      =    %3.2f \n{space 59} alpha  =    %3.2f \n{space 59} reduce =   %5s\n{space 59} H0     =  {space `spacer'}%4.3f\n",`dof',`q',`alpha',"`reduce_t'",`adjust')
 }
 mata:  printf("\n{txt} Treatment{space 5} {c |} {space 4}Coef.{space 5} S.E.{space 6}t(H0){space 4}R2yd.x{space 5}RV_q{space 4}RV_qa\n")
 mata:  printf("{hline 16}{c +}{hline 59}\n")
 mata:  printf("{txt}%15s {c |}  {res}%8.4f  %8.4f   %8.4f  %8.4f %8.4f %8.4f\n\n",substr("`treat'",1,15),`b_treat',`se_treat',`t_adjust',`r2yd_x',`rv_q',`rv_qa')
 
-
-// Verbose
+// Verbose Description
 if ("`suppress'" == ""){
 	mata: printf("{txt} Partial R2 of the treatment with the outcome (R2yd.x): \n An extreme confounder (orthogonal to the covariates) that explains 100 percent of the \n residual variance of the outcome, would need to explain at least %3.2f percent of the \n residual variance of the treatment to fully account for the observed estimated effect. \n \n",100*`r2yd_x')
 
-	// Formatting
 	if (`q' == 1){
-	mata: printf("{txt} Robustness Value, q = %3.2f (RV_q): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the point estimate to 0 (a bias of 100 percent of the original estimate). Conversely, \n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the point estimate \n to 0. \n \n",`q',100*`rv_q',100*`rv_q')
-	mata: printf("{txt} Robustness Value, q = %3.2f, alpha = %3.2f (RV_qa): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the estimate to a range where it is no longer 'statistically different' from 0 (a bias \n of 100 percent of the original estimate), at the significance level of alpha = %3.2f. Conversely,\n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the estimate to a \n range where it is no longer 'statistically different' from 0, at the significance \n level of alpha = %3.2f \n \n",`q',`alpha',100*`rv_qa',`alpha',100*`rv_qa',`alpha')
+		mata: printf("{txt} Robustness Value, q = %3.2f (RV_q): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the point estimate to 0 (a bias of 100 percent of the original estimate). Conversely, \n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the point estimate \n to 0. \n \n",`q',100*`rv_q',100*`rv_q')
+		mata: printf("{txt} Robustness Value, q = %3.2f, alpha = %3.2f (RV_qa): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the estimate to a range where it is no longer 'statistically different' from 0 (a bias \n of 100 percent of the original estimate), at the significance level of alpha = %3.2f. Conversely,\n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the estimate to a \n range where it is no longer 'statistically different' from 0, at the significance \n level of alpha = %3.2f \n \n",`q',`alpha',100*`rv_qa',`alpha',100*`rv_qa',`alpha')
 	} 
 	else {
-	mata: printf("{txt} Robustness Value, q = %3.2f (RV_q): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the point estimate to %-8.4g (a bias of %4.0f percent of the original estimate). Conversely, \n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the point estimate \n to %8.4f. \n \n",`q',100*`rv_q',`adjust',`scale',100*`rv_q',`adjust')
-	mata: printf("{txt} Robustness Value, q = %3.2f, alpha = %3.2f (RV_qa): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the estimate to a range where it is no longer 'statistically different' from %-8.4g (a bias \n of %4.0f percent of the original estimate), at the significance level of alpha = %3.2f. Conversely,\n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the estimate to a \n range where it is no longer 'statistically different' from %-8.4g, at the significance \n level of alpha = %3.2f \n \n",`q',`alpha',100*`rv_qa',`adjust',`scale',`alpha',100*`rv_qa',`adjust',`alpha')
-
+		mata: printf("{txt} Robustness Value, q = %3.2f (RV_q): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the point estimate to %-8.4g (a bias of %4.0f percent of the original estimate). Conversely, \n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the point estimate \n to %8.4f. \n \n",`q',100*`rv_q',`adjust',`scale',100*`rv_q',`adjust')
+		mata: printf("{txt} Robustness Value, q = %3.2f, alpha = %3.2f (RV_qa): \n Unobserved confounders (orthogonal to the covariates) that explain more than %4.2f percent \n of the residual variance of both the treatment and the outcome are strong enough to bring \n the estimate to a range where it is no longer 'statistically different' from %-8.4g (a bias \n of %4.0f percent of the original estimate), at the significance level of alpha = %3.2f. Conversely,\n unobserved confounders that do not explain more than %4.2f percent of the residual variance \n of both the treatment and the outcome are not strong enough to bring the estimate to a \n range where it is no longer 'statistically different' from %-8.4g, at the significance \n level of alpha = %3.2f \n \n",`q',`alpha',100*`rv_qa',`adjust',`scale',`alpha',100*`rv_qa',`adjust',`alpha')
 	}
 }
 
-
-
-	
 // Benchmark
 
 if("`benchmark'"!="" | "`gbenchmark'"!=""){
 
-	
 // Store benchmarks in mata and resize output tables
 	local max_strl = 15
 	local bench_master = 0
@@ -231,8 +223,7 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 			}
 			mata: benchm = (benchm \ benchc)
 			local bench_master = `bench_master' + 1
-		}	
-		
+		}		
 	} 
 	else {
 		if ("`gbenchmark'"!=""){
@@ -262,8 +253,15 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 	}
 	global lim_ub = `lim_ub'
 
-	///////
-	// Bounds
+///////
+// Bounds
+
+	// Initial regressions
+	qui:reg `depvar' `regs' if `touse', noheader notable
+	estimates store main_model
+	local regs_treat: list regs - treat
+	qui:reg `treat' `regs_treat' if `touse', noheader notable
+	estimates store treat_model
 
 	local bench_count = 1
 	forvalues i = 1(1)`bench_master'{
@@ -285,28 +283,26 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 			}
 		
 			if ("`bench_type'" =="single" & (strpos("`bench'",".")==0)){
-				qui:reg `depvar' `regs' if `touse', noheader notable
-				local regs2: list regs - treat
+				qui: estimates restore main_model
 				local bench_to =  _b[`bench']/_se[`bench']
 				local r2yxj_x = `bench_to'*`bench_to' / (`bench_to'*`bench_to' + `dof')
 
-				qui:reg `treat' `regs2' if `touse', noheader notable
+				qui: estimates restore treat_model
 				local dof_b = e(df_r)
 				local bench_t =  _b[`bench']/_se[`bench']
 				local r2dxj_x = `bench_t'*`bench_t' / (`bench_t'*`bench_t' + `dof_b')
 			}
 			else {
-				qui:reg `depvar' `regs' if `touse', noheader notable
+				qui: estimates restore main_model
 				local rss_all = e(rss)
-				local regs2: list regs - bench
-				qui:reg `depvar' `regs2' if `touse', noheader notable
+				local regs_bench: list regs - bench
+				qui:reg `depvar' `regs_bench' if `touse', noheader notable
 				local rss_omit = e(rss)
 				local r2yxj_x = (`rss_omit'-`rss_all')/`rss_omit'
 				
-				local regs3: list regs - treat
-				qui:reg `treat' `regs3' if `touse', noheader notable
+				qui: estimates restore treat_model
 				local rss_all = e(rss)
-				local regs4: list regs3 - bench
+				local regs4: list regs_treat - bench
 				qui:reg `treat' `regs4' if `touse', noheader notable
 				local rss_omit = e(rss)
 				local r2dxj_x = (`rss_omit'-`rss_all')/`rss_omit'
@@ -339,7 +335,6 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 
 	ereturn post, esample(`touse')
 
-	
 	/// Extreme bounds
 	local spacer_a= (`max_strl'-6)
 	mata: printf("\n\n{txt} Extreme Bound{space `spacer_a'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.\n{hline `spacer_b'}{c +}{hline 30} \n")
@@ -391,7 +386,6 @@ if ("`extremeplot'" != ""){
 		local mlines = "1,.75,.5"
 	}
 	
-		
 	// Set bounds and initialize plot
 	if ("`elim'"=="" & "`benchmark'"!=""){
 		if (((`r2dxj_x'/(1 - `r2dxj_x'))  + .1) < `elim_ub'){
@@ -406,36 +400,28 @@ if ("`extremeplot'" != ""){
 	local dim = colsof(s_extremeplot)	
 	svmat s_extremeplot, names("sense_ep_") 
 
-
-		if ("`r2yz'" == ""){
-			local legend = `"1 "100%" 2 "75%" 3 "50%""'
-		}
-		else {
-
+	if ("`r2yz'" == ""){
+		local legend = `"1 "100%" 2 "75%" 3 "50%""'
+	}
+	else {
+			capture: local lab1 : di %4.1f s_extremelabels[1,1]
+			capture: local lab2 : di %4.1f s_extremelabels[1,2]		
+			capture: local lab3 : di %4.1f s_extremelabels[1,3]
+			capture: local lab4 : di %4.1f s_extremelabels[1,4]
+				
 			if (`dim' == 2){
-
-				local lab1 : di %4.1f s_extremelabels[1,1]
 				local legend = `"1 "`lab1'%""'
 			}
 			if (`dim' == 3){
-				local lab1 : di %4.1f s_extremelabels[1,1]
-				local lab2 : di %4.1f s_extremelabels[1,2]
 				local legend = `"1 "`lab1'%"  2 "`lab2'%""'
 			}
 			if (`dim' == 4){
-				local lab1 : di %4.1f s_extremelabels[1,1]
-				local lab2 : di %4.1f s_extremelabels[1,2]		
-				local lab3 : di %4.1f s_extremelabels[1,3]
 				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%""'
 			}
 			if (`dim' == 5){
-				local lab1 : di %4.1f s_extremelabels[1,1]
-				local lab2 : di %4.1f s_extremelabels[1,2]		
-				local lab3 : di %4.1f s_extremelabels[1,3]
-				local lab4 : di %4.1f s_extremelabels[1,4]
 				local legend = `"1 "`lab1'%" 2 "`lab2'%" 3 "`lab3'%" 4 "`lab4'%""'
 			}			
-		}
+	}
 		
 	
 	if("`benchmark'"!="" |  "`gbenchmark'"!=""){
@@ -471,15 +457,11 @@ if ("`extremeplot'" != ""){
 				}
 			 }
 		 }
-		 
 		 addplot_m: line sense_ep_2 sense_ep_1, lcolor(black) legend(on size(small) lcolor(black) rows(1) subtitle("Partial R{superscript:2} of confounder(s) with the outcome",size(small)) order (`legend'))
 		 graph display s_extremeplot
-	
-
-		 
+ 
 	capture: drop sense_ep_* benchval	
-	capture: mat drop s_extremeplot
-	
+	capture: mat drop s_extremeplot	
 	restore
 }
 
@@ -596,7 +578,6 @@ version 13
 	local lb = `thresh'  - `gap' 
 	local ub = `thresh'  + `gap' 
 	
-	
 	forvalues i = 1(1)`clines'{
 		local cutvalue = round(toprange[`i',3],.0001)
 		local cutvalue_round :   di %6.2f toprange[`i',3]
@@ -608,7 +589,6 @@ version 13
 				addplot_m: contourline sense_contour_z sense_contour_y sense_contour_x if sense_contour_z!=., ccuts(`cutvalue') ccolor(gray) clwidths(vthin) text(`cut_x' `cut_x'  "`cutvalue_round'", size(vsmall) bcolor(white) box place(ne))
 			}
 	}
-
 	
 	// Add points	
 			local dim = rowsof(benchmarks)	
@@ -701,7 +681,6 @@ program addplot_m
 end
 
 
-
 version 13
 mata:
 mata clear
@@ -724,7 +703,6 @@ real scalar adjusted_estimate(estimate, se, dof, r2yz_dx, r2dz_x,reduce){
 real scalar adjusted_t(estimate, se, dof, r2yz_dx, r2dz_x,reduce,h0){ 
 	real scalar bias,adjusted_e,adjusted_se
 	bias = sqrt(r2yz_dx * r2dz_x / (1 - r2dz_x)) * se * sqrt(dof)
-
 
 	if (reduce == 1){
 		adjusted_e = (sign(estimate)*(abs(estimate) - bias))
@@ -869,7 +847,6 @@ void extreme_bounds(custom_ky){
 	
 	extreme = st_matrix("extreme")
 
-	
 	j = 1
 	for (i=1; i<=rows(extreme); i=i+1){ 
 		if(extreme[i,1] == extreme[1,1] & extreme[i,2] == extreme[1,2] & extreme[i,4]==extreme[1,4] & i!=1){
@@ -912,7 +889,6 @@ void extreme_plot(estimate, se, dof, lim_lb,lim_ub,reduce,crit, userlim, real ve
 	(void) st_matrix("s_extremeplot",output)
 	(void) st_matrix("s_extremelabels",r2yz)
 }
-
 
 
 void contour_plot(estimate,se,dof,lim_lb,lim_ub,reduce,clines,critical,tplot,thresh){
@@ -986,8 +962,3 @@ void contour_plot(estimate,se,dof,lim_lb,lim_ub,reduce,clines,critical,tplot,thr
 
 
 end
-
-
-
-
-
