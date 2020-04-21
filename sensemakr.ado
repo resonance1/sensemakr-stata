@@ -1,3 +1,4 @@
+
 program define sensemakr, eclass
 version 13
 syntax varlist(min=2 ts fv) [if] [, Treat(varlist max=1) ///
@@ -352,7 +353,6 @@ if("`benchmark'"!="" | "`gbenchmark'"!="" ){
 		mata: contour_plot(`b_treat',`se_treat',`dof',`lim_lb',$lim_ub,`reduce',`clines',`adjust',0,`adjust')
 		matrix colnames contourgrid = "x" "y" "z"
 		ereturn matrix contourgrid = contourgrid
-	
 		s_contourplot `b_treat' `se_treat' `adjust' `clines' `reduce'  `custom_ky'  0 `adjust'
 	}
 
@@ -365,14 +365,13 @@ if("`benchmark'"!="" | "`gbenchmark'"!="" ){
 			local adjust2 = sign(`b_treat')*(abs( invt(`dof'-1, (`alpha'/2))))
 		}
 		mata: contour_plot(`b_treat',`se_treat',`dof',`lim_lb',$lim_ub,`reduce',`clines',`adjust',1,`adjust2')
-		matrix colnames contourgrid = "x" "y" "z"
-		ereturn matrix tcontourgrid = contourgrid
+		mat contourgrid2 = contourgrid
+		matrix colnames contourgrid2 = "x" "y" "z"
+		ereturn matrix tcontourgrid = contourgrid2
 		
 		s_contourplot `b_treat' `se_treat' `adjust' `clines' `reduce'  `custom_ky'  1 `adjust2'
 		
 	}
-
-
 }
 
 if ("`extremeplot'" != ""){
@@ -432,8 +431,8 @@ if ("`extremeplot'" != ""){
 		capture: graph close _all
 		// Plot
 		line sense_ep_2 sense_ep_1, nodraw name(s_extremeplot ,replace)  ///
-		yline(`adjust',lpattern(dash) lcolor(red)) ///
-		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) lcolor(black) legend(off) ///
+		yline(`adjust',lpattern(dash) lcolor(red)) xlab(,labsize(small)) ylab(,labsize(small)) ///
+		xtitle(Partial R{superscript:2} of confounder(s) with the treatment,size(small)) ytitle(Adjusted Effect Estimate,size(small)) lcolor(black) legend(off) ///
 		|| hist benchval, frequency discrete width(.0005) bcolor(black) fcolor(black) yaxis(2) ///
 		 ylabel(0 " " 20 " " 40 " " 60 " " 80 " " 100 " ", nolab labcolor() axis(2) tlcolor(black) tlwidth(thin) labsize(tiny) tl(0))  ytitle(" ",axis(2)) yscale(alt lstyle(none) lcolor() axis(2)) 
 		 
@@ -441,8 +440,8 @@ if ("`extremeplot'" != ""){
 		else { 
 		// Plot
 		line sense_ep_2 sense_ep_1, nodraw name(s_extremeplot ,replace)  ///
-		yline(`adjust',lpattern(dash) lcolor(red)) ///
-		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) lcolor(black) legend(off) 
+		yline(`adjust',lpattern(dash) lcolor(red)) xlab(,labsize(small)) ylab(,labsize(small)) ///
+		xtitle(Partial R{superscript:2} of confounder(s) with the treatment,size(small)) ytitle(Adjusted Effect Estimate,size(small)) lcolor(black) legend(off) 
 		}
 	
 		if (`dim' > 2){
@@ -553,9 +552,9 @@ version 13
 	args b_treat se_treat adjust clines reduce custom_ky tplot thresh
 
 	capture: graph close _all
-	local label = q_pos[1,1]+.003
 	
 	if (`tplot' == 1){
+		local label = q_pos[1,1]+.001
 		local round_adjust : di %6.2f `thresh'	
 		if (`reduce'==0){
 			local round_e = -1*sign(`b_treat')*abs(round((`b_treat'-`adjust')/`se_treat',.01))
@@ -568,6 +567,7 @@ version 13
 		local round_e : di %5.2f `round_e'
 	} 
 	else {
+		local label = q_pos[1,1]+abs((toprange[2,3] - toprange[1,3])/6) 
 		local round_adjust : di %6.2f `adjust'
 		local round_e : di %6.3f `b_treat'
 		local plotname = "s_contourplot"
@@ -575,8 +575,8 @@ version 13
 	}
 	
 	twoway contourline sense_contour_z sense_contour_y sense_contour_x if sense_contour_z!=.,  ///
-				name(`plotname',replace) ccuts(`thresh') ccolor(red) nodraw ///
-				ytitle(Partial R{superscript:2} of confounder(s) with the outcome) xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ///
+				name(`plotname',replace) ccuts(`thresh') ccolor(red) nodraw xlab(,labsize(small)) ylab(,labsize(small)) ///
+				ytitle(Partial R{superscript:2} of confounder(s) with the outcome, size(small)) xtitle(Partial R{superscript:2} of confounder(s) with the treatment, size(small)) ///
 				 text(`label' `label'  "`round_adjust'", size(vsmall) bcolor(white) box place(ne)) ///
 				|| scatteri 0 0 "Unadjusted (`round_e')",legend(off) mlabsize(vsmall) msize(vsmall) mcolor(black) 
 
@@ -932,7 +932,7 @@ void contour_plot(estimate,se,dof,lim_lb,lim_ub,reduce,clines,critical,tplot,thr
 		st_store(i,"sense_contour_y",contourGrid[i,2])
 		st_store(i,"sense_contour_z",contourGrid[i,3])
 	}	
-	
+
 	(void) st_matrix("contourgrid",contourGrid)
 	
 	// Cuts and labels
