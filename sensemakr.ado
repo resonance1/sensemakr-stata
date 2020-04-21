@@ -371,14 +371,14 @@ if("`benchmark'"!="" | "`gbenchmark'"!="" ){
 		s_contourplot `b_treat' `se_treat' `adjust' `clines' `reduce'  `custom_ky'  1 `adjust2'
 		
 	}
-	capture: graph display s_contourplot
-	capture: graph display s_tcontourplot	
+
 
 }
 
 if ("`extremeplot'" != ""){
-	preserve
 
+	preserve
+	
 	if ("`r2yz'"!=""){
 		local mlines: subinstr local mbounds " " ", ", all
 	}
@@ -429,6 +429,7 @@ if ("`extremeplot'" != ""){
 		mat tempvals = benchmarks[1...,3..3]
 		svmat tempvals, names(benchval)
 		
+		capture: graph close _all
 		// Plot
 		line sense_ep_2 sense_ep_1, nodraw name(s_extremeplot ,replace)  ///
 		yline(`adjust',lpattern(dash) lcolor(red)) ///
@@ -443,7 +444,7 @@ if ("`extremeplot'" != ""){
 		yline(`adjust',lpattern(dash) lcolor(red)) ///
 		xtitle(Partial R{superscript:2} of confounder(s) with the treatment) ytitle(Adjusted Effect Estimate) lcolor(black) legend(off) 
 		}
-		 
+	
 		if (`dim' > 2){
 			 forvalues i = 3(1)`dim' {
 				if (`i' == 3){
@@ -458,12 +459,16 @@ if ("`extremeplot'" != ""){
 			 }
 		 }
 		 addplot_m: line sense_ep_2 sense_ep_1, lcolor(black) legend(on size(small) lcolor(black) rows(1) subtitle("Partial R{superscript:2} of confounder(s) with the outcome",size(small)) order (`legend'))
-		 graph display s_extremeplot
+
  
 	capture: drop sense_ep_* benchval	
 	capture: mat drop s_extremeplot	
 	restore
 }
+
+capture: graph display s_contourplot
+capture: graph display s_tcontourplot	
+capture: graph display s_extremeplot
 
 // Clean up
 capture: macro drop lim_ub user_clim kd_count
@@ -548,7 +553,7 @@ version 13
 	args b_treat se_treat adjust clines reduce custom_ky tplot thresh
 
 	capture: graph close _all
-	local label = q_pos[1,1]+.002
+	local label = q_pos[1,1]+.003
 	
 	if (`tplot' == 1){
 		local round_adjust : di %6.2f `thresh'	
