@@ -1,7 +1,7 @@
 
 program define sensemakr, eclass
 version 13
-syntax varlist(min=2 ts fv) [if] [, Treat(varlist max=1) ///
+syntax varlist(min=2 ts fv) [if] [, Treat(varlist ts max=1) ///
 		Benchmark(varlist ts fv) ///
 		GBenchmark(varlist min=2 ts fv) ///
 		Gname(name) ///
