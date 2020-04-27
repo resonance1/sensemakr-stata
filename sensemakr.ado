@@ -244,8 +244,10 @@ if("`benchmark'"!="" | "`gbenchmark'"!=""){
 	local spacer_d= 4  + (`spacer_b')
 	
 	// Main bounds table
-	mata:  printf("{txt} Bounds on Omitted Variable Bias: \n\n")
-	
+	mata:  printf("{txt} Bounds on Omitted Variable Bias: \n")
+	if ("`suppress'"==""){
+		mata: printf("{txt} The table shows the maximum strength of unobserved confounders, bounded by a multiple of the \n observed explanatory power of the chosen benchmark covariate(s) with the treatment and the outcome.\n\n")
+	}
 	if (`custom_ky' == 1){
 		mata:  printf("{txt} Bound {space `spacer_c'}{c |}{space 3}R2dz.x{space 3}R2yz.dx{space 5}Coef.{space 6}S.E.{space 5}t(H0){space 2}Lower CI{space 1}Upper CI \n{hline `spacer_d'}{c +}{hline 70}\n")
 	} 
