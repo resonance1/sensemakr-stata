@@ -20,7 +20,17 @@ Methodology).](https://doi.org/10.1111/rssb.12348)
     
 # Installation
 
-To install the current github version, run:
+## SSC
+
+To install from SSC, run:
+
+```
+ssc install sensemakr, all replace
+```
+
+## Development version
+
+To install the current development version on github, run:
 
 ```
 net install sensemakr, all replace force from("https://raw.githubusercontent.com/resonance1/sensemakr-stata/master/")
