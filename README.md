@@ -36,6 +36,19 @@ To install the current development version on github, run:
 net install sensemakr, all replace force from("https://raw.githubusercontent.com/resonance1/sensemakr-stata/master/")
 ```
 
+# Citation
+
+Please use the following citations:
+
+  - [Cinelli, C., & Hazlett, C. (2020). “Making sense of sensitivity:
+    Extending omitted variable bias.” Journal of the Royal Statistical
+    Society: Series B (Statistical Methodology), 82(1),
+    39-67.](https://doi.org/10.1111/rssb.12348)
+
+  - [Cinelli, C., & Ferwerda, J., & Hazlett, C. (2020). “sensemakr:
+    Sensitivity Analysis Tools for OLS in R and
+    Stata.”](https://www.researchgate.net/publication/340965014_sensemakr_Sensitivity_Analysis_Tools_for_OLS_in_R_and_Stata)
+
 # Basic Usage
 
 ```
