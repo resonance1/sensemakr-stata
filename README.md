@@ -13,6 +13,8 @@ Methodology).](https://doi.org/10.1111/rssb.12348)
 
   - Download the R package here:
     <https://github.com/carloscinelli/sensemakr/>
+    
+  - Download the Python package here: <https://github.com/nlapier2/PySensemakr>
 
   - Check out the Robustness Value Shiny App at:
     <https://carloscinelli.shinyapps.io/robustness_value/>
